@@ -11,7 +11,13 @@ function calculate(){
     lastInstruct=instruction;
     instruction = ans;
     $("#result").text(ans.toString());
-    if(instruction[0]===goal) restart();
+    if(instruction[0]===goal) {
+        level++;
+        reset();
+        $("#result").text("GOOD!");
+        $("#random-number").text(randomInt().toString());
+        $("#level").text(level.toString());
+    } else restart();
     console.log(ans);
 }
 //calculator
@@ -19,25 +25,29 @@ $(".number").on("click",function() {
     if(!isLastInputNumber) {
         isLastInputNumber=true;
         instruction.push(parseInt($(this).text()));
-        $("#result").text($(this).text());
+    } else {
+        instruction.pop();
+        instruction.push(parseInt($(this).text()));
     }
+    $("#result").text(instruction.join(""));
     console.log(instruction);
 });
 
 $(".method").on("click",function() {
     if(isLastInputNumber){
-        if(($(this).text()==="×" || $(this).text()==="÷") && (lastMethod==="+" || lastMethod==="-")){ 
-            console.log("go on mate");
-        } else {
-            calculate();
-            lastMethod=$(this).text();
-        }
-        
+        // if(($(this).text()==="×" || $(this).text()==="÷") && (lastMethod==="+" || lastMethod==="-")){ 
+        //     console.log("go on mate");
+        // } else {
+        //     calculate();
+        //     lastMethod=$(this).text();
+        // }
+        instruction.push($(this).text());
         isLastInputNumber=false;
-    } else {
+    } else if(lastMethod !=""){
         instruction.pop();
+        instruction.push($(this).text());
     }
-    instruction.push($(this).text());
+    $("#result").text(instruction.join(""));
     console.log(instruction);
 });
 
@@ -45,17 +55,15 @@ $("#reset").on("click",function() {
     reset();
 });
 
-// $("#delete").on("click",function() {
-//     instruction=lastInstruct;
-//     if(instruction.length===1) reset();
-//     else{
-//         instruction.pop();
-//         instruction.pop();
-//         isLastInputNumber=true;
-//         $("#result").text(instruction.toString()); 
-//     }
-//     console.log(instruction);
-// });
+$("#delete").on("click",function() {
+    if(instruction.length===1) reset();
+    else{
+        instruction.pop();
+        isLastInputNumber=!isLastInputNumber;
+        $("#result").text(instruction.toLocaleString());
+    }
+    console.log(instruction);
+});
 
 $("#calculate").on("click",function() {
     if(isLastInputNumber && instruction!="") calculate();
@@ -133,11 +141,13 @@ function restart(){
     reset();
     goal = randomInt();
     $("#random-number").text(goal.toString());
+    $("#level").text(level.toString());
 }
 
 function reset(){
     $("#result").text("");
     isLastInputNumber=false;
+    lastMethod = "";
     instruction = [];
     lastInstruct = [];
 }

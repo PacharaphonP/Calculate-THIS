@@ -1,12 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
 *{
     text-align: center;
+    font-family: "Archivo Black", sans-serif;
+
 }
 
 body{
     background-color: black;
     color: white;
+    margin: 0;
 }
 
+.navbar{
+    border-bottom: 2px solid white;
+}
 .container{
     display: flex;
     flex-direction: column;
@@ -62,18 +70,13 @@ body{
     transform: translateY(4px);
 }
 
+.pressed {
+    background-color: #9b9b9b;
+}
 .number{
     background-color: rgb(158, 93, 220);
 }
 
 .method{
     background-color: rgb(255, 138, 138);
-}
-
-#reset{
-    grid-area: 2/4/3/5;
-}
-
-#calculate{
-    grid-area: 3/4/5/5;
 }
