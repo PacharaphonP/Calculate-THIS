@@ -2,52 +2,58 @@ let methods = "+-×÷";
 let isLastInputNumber = false;
 let lastMethod = "";
 let instruction = [];
-let lastInstruct = [];
+let order = [];
 let level = 1;
-let goal;
+let goal=0;
+let numArr = [0,0,0,0,0,0,0,0,0,0];
+let numUse = [0,0,0,0,0,0,0,0,0,0];
+let warning = $(".warning");
+let numLeft=level+2;
 
 function calculate(){
     let ans = calculatePostFix(makePostFix(instruction));
-    lastInstruct=instruction;
     instruction = ans;
     $("#result").text(ans.toString());
-    if(instruction[0]===goal) {
-        level++;
-        reset();
-        $("#result").text("GOOD!");
-        $("#random-number").text(randomInt().toString());
-        $("#level").text(level.toString());
-    } else restart();
+    if(numLeft===0 && goal===ans[0]) nextLevel();
     console.log(ans);
 }
 //calculator
 $(".number").on("click",function() {
-    if(!isLastInputNumber) {
-        isLastInputNumber=true;
-        instruction.push(parseInt($(this).text()));
-    } else {
-        instruction.pop();
-        instruction.push(parseInt($(this).text()));
-    }
-    $("#result").text(instruction.join(""));
+    let curNum = parseInt($(this).text());
+    let lastNum = instruction[instruction.length-1];
+    if(numArr[curNum]!=numUse[curNum]){
+        if(!isLastInputNumber) {
+            isLastInputNumber=true;
+            instruction.push(curNum);
+        } else {
+            instruction.pop();
+            instruction.push(curNum);
+            numUse[lastNum]--;
+            $("#n"+lastNum.toString()+" .usable").text("x"+(numArr[lastNum]-numUse[lastNum]).toString());
+        }
+        numUse[curNum]++;
+        $("#n"+curNum.toString()+" .usable").text("x"+(numArr[curNum]-numUse[curNum]).toString());
+        lastNum=curNum;
+        numLeft--;
+        warning.text("");
+        $("#result").text(instruction.join(""));
+    } else warning.text("cannot choose this number");
     console.log(instruction);
+    console.log(numLeft);
 });
 
 $(".method").on("click",function() {
     if(isLastInputNumber){
-        // if(($(this).text()==="×" || $(this).text()==="÷") && (lastMethod==="+" || lastMethod==="-")){ 
-        //     console.log("go on mate");
-        // } else {
-        //     calculate();
-        //     lastMethod=$(this).text();
-        // }
         instruction.push($(this).text());
         isLastInputNumber=false;
+        lastMethod=$(this).text();
     } else if(lastMethod !=""){
         instruction.pop();
         instruction.push($(this).text());
+        lastMethod=$(this).text();
     }
     $("#result").text(instruction.join(""));
+    warning.text("");
     console.log(instruction);
 });
 
@@ -58,9 +64,15 @@ $("#reset").on("click",function() {
 $("#delete").on("click",function() {
     if(instruction.length===1) reset();
     else{
+        if(isLastInputNumber){
+            let curNum=instruction[instruction.length-1];
+            numUse[curNum]--;
+            numLeft++;
+            $("#n"+curNum.toString()+" .usable").text("x"+(numArr[curNum]-numUse[curNum]).toString());
+        }
         instruction.pop();
         isLastInputNumber=!isLastInputNumber;
-        $("#result").text(instruction.toLocaleString());
+        $("#result").text(instruction.join(""));
     }
     console.log(instruction);
 });
@@ -69,8 +81,8 @@ $("#calculate").on("click",function() {
     if(isLastInputNumber && instruction!="") calculate();
 });
 //QoL function
-function randomInt() {
-    return Math.floor(Math.random()*900)+1;
+function randomInt(n) {
+    return Math.floor(Math.random()*n);
 }
 
 function basicCal(a,b,method) {
@@ -118,7 +130,6 @@ function makePostFix(s){
             if(i===s.length-1){
                 for(let j = opStack.length-1;j>=0;j--) {
                     postFix.push(opStack[j]);
-                    console.log(opStack[j]);
                 }
             } else{
                 while(opRank(opStack.slice(-1)[0])>=opRank(s[i+1])){
@@ -138,10 +149,9 @@ function opRank(op){
 //generate Random
 function restart(){
     level = 1;
-    reset();
-    goal = randomInt();
-    $("#random-number").text(goal.toString());
     $("#level").text(level.toString());
+    reset();
+    generateLevel();
 }
 
 function reset(){
@@ -149,7 +159,38 @@ function reset(){
     isLastInputNumber=false;
     lastMethod = "";
     instruction = [];
-    lastInstruct = [];
+    numUse = [0,0,0,0,0,0,0,0,0,0];
+    numLeft=level+2;
+    renderUsable();
 }
 
+function generateLevel(){
+    for(let i=0;i<level+2;i++) {
+        let randomNum = randomInt(9)+1;
+        numArr[randomNum]++;
+        order.push(randomNum);
+        if(i!=level+1){
+            order.push(methods[randomInt(4)]);
+        }
+    }
+    renderUsable();
+    goal = calculatePostFix(makePostFix(order))[0];
+    $("#random-number").text(goal.toString());
+}
+
+function nextLevel(){
+    level++;
+    $("#level").text(level.toString());
+    reset();
+    order=[];
+    numArr = [0,0,0,0,0,0,0,0,0,0];
+    generateLevel();
+    console.log("new level");
+}
+
+function renderUsable(){
+    for(let i=1;i<10;i++) {
+        $("#n"+i.toString()+" .usable").text("x"+numArr[i].toString());
+    }
+}
 restart();

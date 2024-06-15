@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Calculator Game</title>
+</head>
+<body>        
+    <nav class="navbar">
+        <h1>Calculate THIS</h1>
+    </nav>
+    <h2>Level <span id="level">1</span></h2>
+    <h3>number : <span id="random-number"></span></h3>
+    <div class="container">
+        <div id="result"></div>
+        <div class="calculator">
+            <div class="method btn" value="">+</div>
+            <div class="method btn" value="">-</div>
+            <div class="method btn" value="">×</div>
+            <div class="method btn" value="">÷</div>
+            <div class="number btn" id="n1" value="1">1<p class="usable">x0</p></div>
+            <div class="number btn" id="n2" value="2">2<p class="usable">x0</p></div>
+            <div class="number btn" id="n3" value="3">3<p class="usable">x0</p></div>
+            <div class="btn" id="delete">&larr;</div>
+            <div class="number btn" id="n4" value="4">4<p class="usable">x0</p></div>
+            <div class="number btn" id="n5" value="5">5<p class="usable">x0</p></div>
+            <div class="number btn" id="n6" value="6">6<p class="usable">x0</p></div>
+            <div class="btn" id="reset">C</div>
+            <div class="number btn" id="n7" value="7">7<p class="usable">x0</p></div>
+            <div class="number btn" id="n8" value="8">8<p class="usable">x0</p></div>
+            <div class="number btn" id="n9" value="9">9<p class="usable">x0</p></div>
+            <div class="btn" id="calculate">=</div>
+        </div>
+    </div>
+    <h3 class="warning"></h3>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="./gamelogic.js"></script>
+</body>
+</html>
