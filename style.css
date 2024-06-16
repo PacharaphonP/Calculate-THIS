@@ -1,18 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 *{
     text-align: center;
-    font-family: "Archivo Black", sans-serif;
-
+    font-family: "Orbitron", sans-serif;
+    
 }
 
 body{
     background-color: black;
-    background: linear-gradient(black,rgb(59, 59, 59));
+    background: linear-gradient(black,rgb(35, 35, 35));
     color: white;
     margin: 0;
     height: 100vh;
 }
 
+h3{
+    font-size: 20px;
+}
 .navbar{
     border-bottom: 1px solid rgba(255, 255, 255, 0.219);
 }
@@ -42,6 +46,7 @@ body{
     color: black;
     letter-spacing: 1px;
     overflow: hidden;
+    font-weight: 700;
 }
 
 .calculator{
@@ -52,6 +57,8 @@ body{
     grid-template-rows: repeat(4,50px);
     gap: 10px;
     margin: auto;
+    font-weight: 00;
+    font-size: 20px;
 }
 
 .btn{
